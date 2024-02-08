@@ -5,3 +5,5 @@
 !makefile
 *.o
 .cache/*
+.config/*
+.*-cache/*
