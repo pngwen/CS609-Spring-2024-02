@@ -1,0 +1,44 @@
+{ pkgs }: {
+    deps = [
+      pkgs.tecoc
+      pkgs.gnu-cobol.bin
+      pkgs.cowsay
+      pkgs.clang_12
+      pkgs.ccls
+      pkgs.gdb
+      pkgs.gnumake
+      pkgs.jq.bin
+      pkgs.dotnet-sdk
+      pkgs.omnisharp-roslyn
+      pkgs.ruby_3_1
+      pkgs.rubyPackages_3_1.solargraph
+      pkgs.zig
+      pkgs.zls
+      pkgs.luajitPackages.luarocks
+      pkgs.lua
+      pkgs.sumneko-lua-language-server
+      pkgs.valgrind
+      pkgs.qemu
+      pkgs.bc
+      pkgs.vim
+      pkgs.ed
+      pkgs.man
+      pkgs.man-pages
+      pkgs.pandoc
+      pkgs.expect
+      pkgs.bwbasic
+      pkgs.SDL2
+      pkgs.SDL2.dev
+      pkgs.SDL2_image
+      pkgs.SDL2_ttf
+      pkgs.pkg-config
+      pkgs.unzip
+      pkgs.maven
+      pkgs.jdk
+      pkgs.haskellPackages.ghc
+      pkgs.haskell-language-server
+      pkgs.algol68g
+      pkgs.gfortran
+      pkgs.gnu-cobol
+    ];
+}

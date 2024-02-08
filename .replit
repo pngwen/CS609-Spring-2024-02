@@ -1,0 +1,56 @@
+run = "cowsay 'I am not meant to be run directly. Use the shell instead!'"
+hidden = ["main", "main-debug", "**/*.o", "**/*.d", ".ccls-cache", ".*", "zig-*", ".pythonlibs", "*.pyc", ".ghci", "ghci_wrapper.sh"]
+
+modules = ["go-1.21:v2-20231201-3b22c78", "rust-1.72:v1-20230911-f253fb1", "python-3.10:v18-20230807-322e88b"]
+
+[nix]
+channel = "stable-23_11"
+
+[languages]
+
+[languages.c]
+pattern = "**/*.{c,h}"
+
+[languages.c.languageServer]
+start = "ccls"
+
+[languages.cpp]
+pattern = "**/*.{cpp,h}"
+
+[languages.cpp.languageServer]
+start = "ccls"
+
+[languages.csharp]
+pattern = "**/*.cs"
+
+[languages.csharp.languageServer]
+start = ["OmniSharp", "--languageserver"]
+
+[languages.ruby]
+pattern = "**/*.rb"
+
+[languages.ruby.languageServer]
+start = "solargraph stdio"
+
+[languages.zig]
+pattern = "**/*.zig"
+[languages.zig.languageServer]
+start = "zls"
+
+[languages.lua]
+pattern = "**/*.lua"
+
+[languages.lua.languageServer]
+start = ["lua-language-server"]
+
+[languages.haskell]
+pattern = "**/*.hs"
+
+[languages.haskell.languageServer]
+start = ["haskell-language-server-wrapper", "--lsp"]
+
+[env]
+PATH="${REPL_HOME}/.local/bin:."
+DOTNET_NOLOGO = "1"
+DOTNET_CLI_TELEMETRY_OPTOUT = "1"
+DOTNET_SKIP_FIRST_TIME_EXPERIENCE="true"
