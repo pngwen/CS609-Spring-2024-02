@@ -1,0 +1,53 @@
+Simplified Regex Syntax
+=======================
+
+Characters
+----------
+a   - individual characters
+.   - any character
+\t  - tab
+\n  - newline
+\x  - literal character (whatever follows \ if not t or n)
+
+Quantifiers
+-----------
+*   - zero or more
++   - one or more
+?   - exactly zero or one
+
+
+Classes and Groups
+------------------
+( )  - Group whatever is in parenthesis
+[ ]  - Character class
+       a   - individual characters
+       0-9 - Range of characters via ASCII codes
+[^ ] - Inverse Character Class
+|    - or "a|b" including with groups
+
+BNF
+---
+< Regex >      ::= < Regex > < Match >
+                   | < Match >
+
+< Match >      ::= < Match > < Quantifier >
+                   | < Or > 
+                   | < Group >
+                   | < Class >
+                   | < Character >
+
+< Or >         ::= < Match > "|" < Match >
+
+< Group >      ::= "(" < Regex > ")"
+
+< Class >      ::= "[" < Class-Spec > "]"
+                   | "[^" < Class-Spec > "]"
+
+< Class-Spec > ::= < Class-Spec > < Range > 
+                   | < Class-Spec > < Character >
+                   | < Range >
+                   | < Character >
+
+< Range >      ::= < Character > "-" < Character >
+
+< Character >  ::= Any character along with \n, \t, and \x expansions
