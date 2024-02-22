@@ -1,0 +1,12 @@
+< Start >      ::= < Expression >
+
+< Expression > ::= < Expression > "+" < Expression >
+                   | < Expression > "-" < Expression >
+                   | < Expression > "*" < Expression >
+                   | < Expression > "/" < Expression >
+                   | < Number >
+                   
+< Number >     ::= < Number > < Digit >
+                   | < Digit >
+                   
+< Digit >      ::= "0" | "1" | "2" | ... | "9"
