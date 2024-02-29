@@ -1,4 +1,4 @@
-TARGETS=regex_test
+TARGETS=regex_test lexer_test
 REGEX_LIB=regex_node.o character_node.o group_node.o zero_node.o one_node.o or_node.o range_node.o optional_node.o inverse_node.o
 LD=g++
 CC=g++
@@ -7,6 +7,7 @@ CXXFLAGS=-g
 
 
 regex_test: regex_test.o $(REGEX_LIB)
+lexer_test: lexer_test.o lexer.o regex_node.o character_node.o group_node.o wildcard_node.o
 
 clean:
 	rm -f *.o $(TARGETS)
