@@ -16,9 +16,22 @@ GroupNode::~GroupNode()
 // Attempt to match the string beginning at the given position.
 bool GroupNode::match(const std::string &str, size_t &pos)
 {
-  // YOUR CODE HERE
-  
-  return false;
+  //save the starting position
+  size_t start = pos;
+  //try to match each node
+  for (auto node : _nodes) {
+    if (node->match(str, pos)) {
+      //if node matched continue to the next node
+      continue; 
+    }
+    //else return to the original position and return false
+    else {
+    pos = start;
+    return false; 
+    }
+  }
+  //all nodes in the group matched return true
+  return true;
 }
 
 // Add a node to the group
