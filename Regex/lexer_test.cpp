@@ -11,6 +11,14 @@ RegexNode *build_single() {
   return new WildcardNode();
 }
 
+// Regex: \\.
+RegexNode *build_escaped() {
+  GroupNode *node = new GroupNode();
+  node->add_node(new CharacterNode('\\'));
+  node->add_node(new WildcardNode());
+  return node;
+}
+
 // Regex: ..
 RegexNode *build_double() {
   GroupNode *node = new GroupNode();
@@ -48,10 +56,11 @@ int main() {
   Lexer lexer;
 
   // add our tokens to our lexer
- // lexer.add_token(RANGE, build_range());
- // lexer.add_token(SINGLE, build_single());
+  lexer.add_token(RANGE, build_range());
+  lexer.add_token(SINGLE, build_escaped());
+  lexer.add_token(SINGLE, build_single());
   lexer.add_token(DOUBLE, build_double());
-//  lexer.add_token(TRIPLE, build_triple());
+  lexer.add_token(TRIPLE, build_triple());
 
   while(std::cin >> input) {
     lexer.input(input);
