@@ -22,7 +22,7 @@ public:
   virtual ~Lexer();
 
   // set the input string to scan
-  void input(const std::string& input);
+  void input(const std::string& _input);
 
   // retrieve the input string to scan
   std::string input() const;

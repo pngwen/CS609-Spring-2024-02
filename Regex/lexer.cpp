@@ -20,7 +20,7 @@ Lexer::~Lexer() {
 }
 
 // set the input string to scan
-void Lexer::input(const std::string &input) {
+void Lexer::input(const std::string &_input) {
   this->_input = _input; // read the input string
   this->_pos = 0;        // start at the beginning of the input string
 }
