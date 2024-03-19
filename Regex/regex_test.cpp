@@ -104,7 +104,19 @@ RegexNode *construct_regex2() {
   // create the result
   GroupNode *regex = new GroupNode();
 
-  // YOUR CODE HERE
+  // Saikumar Ravuri,Sri venkata Bhargav Mutyala
+  //Pruthvi Duvva,Vanaja Oruganti
+
+  //ab node creation 
+  GroupNode *ab = new GroupNode();
+  ab->add_node(new CharacterNode('a')); 
+  ab->add_node(new CharacterNode('b')); 
+
+  OneNode *plus = new OneNode(ab); 
+  regex->add_node(plus); 
+
+  regex->add_node(new CharacterNode('a'));
+  regex->add_node(new CharacterNode('c')); 
 
   return regex;
 }
@@ -114,8 +126,8 @@ RegexNode *construct_regex3() {
   // create the result
   GroupNode *regex = new GroupNode();
 
-  // Vikas Gajjela;Spandana Masadi;Naga Venkata Naresh kollu; Jeesha
-  // Lunavath;Navya Leburi
+  // Vikas Gajjela;Spandana Masadi;Naga Venkata Naresh kollu;
+  //Jeesha Lunavath;Navya Leburi
 
   // YOUR CODE HERE
   OrNode *alt = new OrNode();
