@@ -116,8 +116,20 @@ RegexNode* construct_regex2() {
 RegexNode* construct_regex3() {
   // create the result
   GroupNode *regex = new GroupNode();
+
+  //Vikas Gajjela;Spandana Masadi;Naga Venkata Naresh kollu; Jeesha Lunavath;Navya Leburi
   
   // YOUR CODE HERE
+  OrNode *alt = new OrNode();
+  alt->add_node(new CharacterNode('a')); 
+
+  GroupNode *aa = new GroupNode();
+  aa->add_node(new CharacterNode('a')); 
+  aa->add_node(new CharacterNode('a'));
+  alt->add_node(aa);
+
+  regex->add_node(alt);
+  regex->add_node(new CharacterNode('b')); 
   
   return regex;
 }
