@@ -149,10 +149,25 @@ RegexNode* construct_regex4() {
 // Construct the regular expression [a-zA-Z]+
 RegexNode * construct_regex5()
 {
-  GroupNode *regex = new GroupNode();  
+   // Sri Priyanka Madamanchi <smadamanchi2s@semo.edu>
+   // Bhuvaneswari Thottempudi <bthottempudi2s@semo.edu>
+   //Vamsi Kandula <vkandula1s@semo.edu>
+   // Joharika Jillelamudi <jjillelamudi1s@semo.edu>
+   // Venkatesh Marnedi < vmarnedi1s@semo.edu>
+   // Baby Sowmya Sunkara <bsunkara1s@semo.edu>
+   // Gopi Krishna Pavuluri <gpavuluri1s@semo.edu>
+   
+   
+    GroupNode *regex = new GroupNode();
 
-  // YOUR CODE HERE
-  
+  // Create an OrNode to match either lowercase or uppercase letters
+  OrNode *letter_or = new OrNode();
+  letter_or->add_node(new RangeNode('a', 'z'));
+  letter_or->add_node(new RangeNode('A', 'Z'));
+
+  // Add the OrNode to match one or more occurrences of letters
+  regex->add_node(new OneNode(letter_or));
+
   return regex;
 }
 
