@@ -135,8 +135,25 @@ RegexNode *construct_regex3() {
 // Construct the regular expression [0-9]+(\.[0-9]+)?
 RegexNode *construct_regex4() {
   GroupNode *regex = new GroupNode();
-
+  // Meghana Katne; Lakshman Kakarla; Shravya Akavaram; Lu Zhang;
   // YOUR CODE HERE
+  GroupNode *digits = new GroupNode();
+  digits->add_node(new RangeNode('0', '9')); // Matches a digit
+  OneNode *one_or_more_digits =
+      new OneNode(digits); // Matches one or more digits
+
+  // create nodes for (\.[0-9]+)?
+  GroupNode *decimal_part = new GroupNode();
+  decimal_part->add_node(new CharacterNode('.')); 
+  GroupNode *decimal_digits = new GroupNode();
+  decimal_digits->add_node(new RangeNode('0', '9')); 
+  OneNode *one_or_more_decimal_digits = new OneNode(
+      decimal_digits); 
+  OptionalNode *optional_decimal_part =
+      new OptionalNode(decimal_part); 
+
+  regex->add_node(one_or_more_digits);
+  regex->add_node(optional_decimal_part);
 
   return regex;
 }
