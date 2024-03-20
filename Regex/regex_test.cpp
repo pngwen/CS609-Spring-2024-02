@@ -193,9 +193,23 @@ RegexNode *construct_regex5() {
 
 // Construct the regular expression "[^"]*"
 RegexNode *construct_regex6() {
+  // VIVEKANANDA REDDY TIPPI REDDY
+  // BHARGAVA SITA RAMI REDDY VIPPALA
+  //KSHATRIYA TARUN SINGH
+  //VINAY KUMAR GOGINENI
+  //RAKESH REDDY PULIGARI 
+  //ESWARCHANDU VUNNAM
   GroupNode *regex = new GroupNode();
+  
 
-  // YOUR CODE HERE
+  regex->add_node(new CharacterNode('"'));
+  GroupNode *inner = new GroupNode();
+  
+  inner->add_node(new RangeNode(0, 34));// Range from 0 to 34 (ASCII value of ")
+  ZeroNode *zero_or_more_inner = new ZeroNode(inner);
+  regex->add_node(zero_or_more_inner);
+
+  regex->add_node(new CharacterNode('"'));
 
   return regex;
 }
