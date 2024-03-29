@@ -13,7 +13,7 @@ CalculatorLexer::CalculatorLexer() {
   _lex.add_token(LPAREN, make_regex("\\("));
   _lex.add_token(RPAREN, make_regex("\\)"));
   _lex.add_token(INT, make_regex("[0-9]+"));
-  _lex.add_token(REAL, make_regex("[0-9]+\.[0-9]+"));
+  _lex.add_token(REAL, make_regex("[0-9]+\\.[0-9]+"));
 }
 
 // set the input string to scan
