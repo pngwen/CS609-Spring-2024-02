@@ -17,6 +17,6 @@ NumberNode::NumberNode(const Lexer::Token &token) {
 
 NumberNode::~NumberNode() {}
 
-ASTResult NumberNode::eval() {
+ASTResult NumberNode::eval(RefEnv *env) {
     return _value;
 }

@@ -11,7 +11,7 @@ class NumberNode : public ASTNode {
 public:
     NumberNode(const Lexer::Token &token);
     virtual ~NumberNode();
-    virtual ASTResult eval();
+    virtual ASTResult eval(RefEnv *env);
 
 private:
     ASTResult _value;

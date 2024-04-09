@@ -22,7 +22,9 @@ public:
     LPAREN,
     RPAREN,
     INT,
-    REAL
+    REAL,
+    ID,
+    ASSIGN
   };
 
   // set the input string to scan

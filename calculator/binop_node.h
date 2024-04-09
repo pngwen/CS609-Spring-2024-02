@@ -30,7 +30,7 @@ public:
   virtual ASTResult apply(const ASTResult &lhs, const ASTResult &rhs) = 0;
 
   // evaluate the node
-  virtual ASTResult eval();
+  virtual ASTResult eval(RefEnv *env);
 
 protected:
   ASTNode *_left;

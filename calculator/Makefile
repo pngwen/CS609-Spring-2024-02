@@ -1,6 +1,7 @@
 TARGETS=calculator lexer_test
 CALCULATOR_OBJ= add_node.o\
 				        ast_node.o\
+								ref_env.o\
 								binop_node.o\
 								calculator_lexer.o\
 								calculator_parser.o\
@@ -8,7 +9,7 @@ CALCULATOR_OBJ= add_node.o\
 								multiply_node.o\
 								number_node.o\
 								pow_node.o\
-								subtract_node.o
+								subtract_node.o\
 
 #compiler information
 LD=g++

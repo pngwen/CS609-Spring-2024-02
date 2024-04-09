@@ -5,6 +5,8 @@
 // Author: Robert Lowe
 #ifndef AST_NODE_H
 #define AST_NODE_H
+#include "ref_env.h"
+class RefEnv;
 
 struct ASTResult {
   enum { VOID=0, INT, REAL} type;
@@ -20,6 +22,6 @@ public:
   virtual ~ASTNode();
 
   // evaluate the node
-  virtual ASTResult eval() = 0;
+  virtual ASTResult eval(RefEnv *env) = 0;
 };
 #endif

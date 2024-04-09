@@ -29,10 +29,10 @@ ASTNode *BinopNode::left() { return _left; }
 ASTNode *BinopNode::right() { return _right; }
 
 // Evaluate the node
-ASTResult BinopNode::eval() {
+ASTResult BinopNode::eval(RefEnv *env) {
   // First, evaluate the left and right child nodes
-  ASTResult leftResult = left()->eval();
-  ASTResult rightResult = right()->eval();
+  ASTResult leftResult = left()->eval(env);
+  ASTResult rightResult = right()->eval(env);
   
   // Then, apply the operation to the results of the left and right nodes.
   // This relies on derived classes implementing the 'apply' method.

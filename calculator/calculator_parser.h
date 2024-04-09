@@ -17,16 +17,24 @@ private:
   // advance the lexer
   void next();
 
-  // check to see if the current token matches the given token
+  // check to see if the cur  rent token matches the given token
   bool has(int t);
 
-  //< Expression > ::= < Term > < Expression' >
+  // < Expression > ::= < Ref > < Expression' > 
+  //                    | < Sum >                       
   ASTNode *parse_expression();
 
-  //< Expression' >::= ADD < Term > < Expression' >
-  //                   | SUB < Term > < Expression' >
-  //                   | ""
+  // < Expression' > ::= ASSIGN < Expression >
+  //                     | < Sum' >
   ASTNode *parse_expression2(ASTNode *left);
+
+  //< Sum > ::= < Term > < Sum' >
+  ASTNode *parse_sum();
+
+  //< Sum' >::= ADD < Term > < Sum' >
+  //                   | SUB < Term > < Sum' >
+  //                   | ""
+  ASTNode *parse_sum2(ASTNode *left);
                      
   //< Term >       ::= < Factor > < Term' > 
   ASTNode *parse_term();
@@ -45,8 +53,12 @@ private:
 
   //< Exponent >   ::= INT 
   //                   | REAL
+  //                   | < Ref >
   //                   | LPAR < Expression > RPAR
   ASTNode *parse_exponent();
+
+  //< Ref >        ::= ID
+  ASTNode *parse_ref();
 };
 
 #endif

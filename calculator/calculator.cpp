@@ -2,11 +2,13 @@
 #include <string>
 #include "calculator_lexer.h"
 #include "calculator_parser.h"
+#include "ref_env.h"
 
 int main() {
   CalculatorLexer lexer;
   CalculatorParser parser;
   std::string input;
+  RefEnv global;
 
   for(;;) {
     // get a line of input
@@ -17,7 +19,7 @@ int main() {
     // set the input string to scan
     lexer.input(input);
     ASTNode *tree = parser.parse(&lexer);
-    ASTResult result = tree->eval();
+    ASTResult result = tree->eval(&global);
     delete tree;
 
     // print the result
