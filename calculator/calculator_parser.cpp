@@ -8,6 +8,8 @@
 #include "pow_node.h"
 #include "subtract_node.h"
 #include "number_node.h"
+#include "ref_node.h"
+#include "assign_node.h"
 #include <stdexcept>
 
 // advance the lexer
@@ -16,16 +18,42 @@ void CalculatorParser::next() { _cur = _lexer->next(); }
 // check to see if the current token matches the given token
 bool CalculatorParser::has(int t) { return _cur.tok == t; }
 
-// <Expression> ::= <Term> <Expression’>
+
+// < Expression > ::= < Ref > < Expression' > 
+//                    | < Sum >                       
 ASTNode *CalculatorParser::parse_expression() {
-  ASTNode *node = parse_term();
-  return parse_expression2(node);
+  if(has(CalculatorLexer::ID)) {
+    ASTNode *left = parse_ref();
+    return parse_expression2(left);
+  }
+
+  return parse_sum();
 }
 
-// <Expression'> ::= ADD <Term> <Expression'>
-//                   | SUB <Term> <Expression'>
-//                   | ""
+// < Expression' > ::= ASSIGN < Expression >
+//                     | < Sum' >
 ASTNode *CalculatorParser::parse_expression2(ASTNode *left) {
+  if(has(CalculatorLexer::ASSIGN)) {
+    next();
+    AssignNode *node = new AssignNode();
+    node->left(left);
+    node->right(parse_expression());
+    return node;
+  }
+
+  return parse_sum2(left);
+}
+
+// < Sum > ::= < Term > < Sum’ >
+ASTNode *CalculatorParser::parse_sum() {
+  ASTNode *node = parse_term();
+  return parse_sum2(node);
+}
+
+// < Sum' > ::= ADD <Term> <Sum'>
+//                   | SUB <Term> <Sum'>
+//                   | ""
+ASTNode *CalculatorParser::parse_sum2(ASTNode *left) {
   BinopNode *result = nullptr;
 
   if (has(CalculatorLexer::ADD)) {
@@ -39,7 +67,7 @@ ASTNode *CalculatorParser::parse_expression2(ASTNode *left) {
   if(result) {
     result->left(left);
     result->right(parse_term());
-    return result;
+    return parse_sum2(result);
   }
 
   return left; // epsilon
@@ -68,7 +96,7 @@ ASTNode *CalculatorParser::parse_term2(ASTNode *left) {
   if(result) {
     result->left(left);
     result->right(parse_term());
-    return result;
+    return parse_term2(result);
   }
 
   return left; // epsilon
@@ -97,6 +125,7 @@ ASTNode *CalculatorParser::parse_factor2(ASTNode *left) {
 // <Exponent> ::= INT
 //                | REAL
 //                | LPAR <Expression> RPAR
+//                | < Ref >
 ASTNode *CalculatorParser::parse_exponent() {
   if (has(CalculatorLexer::INT) || has(CalculatorLexer::REAL)) {
     ASTNode *node = new NumberNode(_cur);
@@ -111,8 +140,20 @@ ASTNode *CalculatorParser::parse_exponent() {
     next(); // consume RPAR
     return node;
   } else {
-    throw std::runtime_error("Unexpected token in parse_exponent()");
+    return parse_ref();
   }
+}
+
+//< Ref >        ::= ID
+ASTNode *CalculatorParser::parse_ref() {
+  // detect an error
+  if(!has(CalculatorLexer::ID)) {
+    throw std::runtime_error("Expected ID");
+  }
+
+  ASTNode *node = new RefNode(_cur.lexeme);
+  next();
+  return node;
 }
 
 ASTNode *CalculatorParser::parse(CalculatorLexer *lexer) {

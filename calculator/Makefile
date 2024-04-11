@@ -10,6 +10,8 @@ CALCULATOR_OBJ= add_node.o\
 								number_node.o\
 								pow_node.o\
 								subtract_node.o\
+								ref_node.o\
+								assign_node.o\
 
 #compiler information
 LD=g++

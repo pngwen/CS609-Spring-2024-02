@@ -18,5 +18,5 @@ public:
   void assign(RefEnv *env, ASTResult _value);
 private:
   std::string _name;
-}
+};
 #endif 
