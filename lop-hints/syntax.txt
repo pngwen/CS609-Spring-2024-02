@@ -1,0 +1,131 @@
+Original Grammar
+================
+< Expression > ::= < L-Value > ":=" < Expression >
+                   | < Sum >
+
+< L-Value >    ::= < Ref >
+
+< Sum >        ::= < Sum > "+" < Term >
+                   | < Sum > "-" < Term >
+                   | < Term >
+                   
+< Term >       ::= < Term > "*" < Factor >
+                   | < Term > "/" < Factor >
+                   | < Factor >
+                   
+< Factor >     ::= < Factor > "^" < Exponent >
+                   | < Exponent >
+                   
+< Exponent >   ::= < Number >
+                   | < Ref >
+                   | "(" < Expression > ")"
+
+< Ref >        ::= < Id > 
+
+< Id >         ::= < Letter > | "_"
+                   | < Ref > < Letter > 
+                   | < Ref > "_"
+                   | < Ref > < Digit >
+                   
+< Number >     ::= < Integer > | < Real >
+
+< Integer >    ::= < Integer > < Digit >
+                   | < Digit >
+
+< Real >       ::= < Integer > "." < Integer >
+
+< Digit >      ::= "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"
+
+
+LL(1) Grammar
+=============
+This is the grammar after tranforming the relevant parts into LL(1).
+
+< Expression > ::= < Ref > < Expression' > 
+                   | < Sum >                       
+
+< Expression' > ::= ":=" < Expression >
+                    | < Sum' >
+
+< Sum > ::= < Term > < Sum' >
+< Sum' >::= "+" < Term > < Sum' >
+                   |"-" < Term > < Sum' >
+                   | ""
+                   
+< Term >       ::= < Factor > < Term' > 
+< Term' >      ::= "*" < Factor > < Term' >
+                   | "/" < Factor > < Term' >
+                   | ""
+
+< Factor >     ::= < Exponent > < Factor' >
+< Factor' >    ::= "^" < Exponent >
+                   | ""
+                   
+< Exponent >   ::= < Number >
+                   | < Ref >
+                   | "(" < Expression > ")"
+                   
+< Ref >        ::= < Id > 
+
+< Id >         ::= < Letter > | "_"
+                   | < Ref > < Letter > 
+                   | < Ref > "_"
+                   | < Ref > < Digit >
+                   
+< Number >     ::= < Integer > | < Real >
+
+< Integer >    ::= < Integer > < Digit >
+                   | < Digit >
+
+< Real >       ::= < Integer > "." < Integer >
+
+< Digit >      ::= "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"
+
+
+Parser Grammar
+==============
+This is the grammar with the tokens removed and placed in a lexer grammar.
+
+< Expression > ::= < Ref > < Expression' > 
+                   | < Sum >                       
+
+< Expression' > ::= ASSIGN < Expression >
+                    |   < Sum' >
+                    
+< Sum >        ::= < Term > < Sum' >
+< Sum' >       ::= ADD < Term > < Sum' >
+                   | SUB < Term > < Sum' >
+                   | ""
+                   
+< Term >       ::= < Factor > < Term' > 
+< Term' >      ::= MUL < Factor > < Term' >
+                   | DIV < Factor > < Term' >
+                   | ""
+
+< Factor >     ::= < Exponent > < Factor' >
+< Factor' >    ::= POW < Exponent >
+                   | ""
+                   
+< Exponent >   ::= INT 
+                   | REAL
+                   | < Ref > 
+                   | LPAR < Expression > RPAR
+                   
+< Ref >        ::= ID
+
+
+Lexer Grammar
+=============
+This is the set of regular expressions defining the tokens.
+
+ADD    \+
+SUB    -
+MUL    *
+DIV    /
+POW    ^
+LPAREN \(
+RPAREN \)
+INT    [0-9]+
+REAL   [0-9]+\.[0-9]+
+ID     [a-zA-Z_][a-zA-Z_0-9]*
+ASSIGN :=
