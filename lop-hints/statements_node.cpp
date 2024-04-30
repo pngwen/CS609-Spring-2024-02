@@ -1,7 +1,7 @@
 #include "statements_node.h"
 
-ASTResult StatementsNode::eval(RefEnv *env) {
-  for(ASTNode* node : _statements) {
+ASTResult StatementsNode::eval(RefEnv *env) {  
+  for(ASTNode *node : _statements) {
     _last_result = node->eval(env);
   }
 
@@ -9,7 +9,7 @@ ASTResult StatementsNode::eval(RefEnv *env) {
 }
 
 void StatementsNode::add_statement(ASTNode *node) {
-  _statements.push_back(node);
+  _statements.push_back(node);  
 }
 
 ASTResult StatementsNode::last_result() {

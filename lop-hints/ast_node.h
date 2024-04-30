@@ -15,7 +15,7 @@ struct ASTResult {
     double r;
   } value;
 
-  bool is_true();
+  bool is_true() const;
 };
 
 class ASTNode {

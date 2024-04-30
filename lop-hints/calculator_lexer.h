@@ -5,10 +5,11 @@
 #define CALCULATOR_LEXER_H
 #include "lib/reglex.h"
 #include <string.h>
+#include <iostream>
 
 class CalculatorLexer {
 public:
-  CalculatorLexer();
+  CalculatorLexer(std::istream &_is);
 
   // Lexer Tokens
   enum token_type {
@@ -29,20 +30,20 @@ public:
     THEN,
     SKIP,
     STOP,
-    SEMI
+    SEMI,
+    LBRACE,
+    RBRACE,
+    EQUAL,
+    EOL
   };
-
-  // set the input string to scan
-  virtual void input(const std::string &_input);
-
-  // return the input string being scanned
-  virtual std::string input() const;
 
   // Get the next token from the input string
   virtual Lexer::Token next();
 
 private:
   Lexer _lex;
+  std::istream &_is;
+  bool _first;
 };
 
 #endif

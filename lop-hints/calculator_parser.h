@@ -63,8 +63,11 @@ private:
   // if condition then statement
   ASTNode *parse_if();
 
-  // Parse a list of statements
+  // collection of statements
   ASTNode *parse_statements();
+
+  // a loop consisting of { statements }
+  ASTNode *parse_loop();
 };
 
 #endif

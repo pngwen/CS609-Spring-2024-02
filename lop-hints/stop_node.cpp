@@ -1,9 +1,9 @@
 #include "stop_node.h"
 
-const char *StopException::what() const throw() {
-  return "Uncaught stop exception";  
+const char *StopException::what() {
+  return "Loopless stop encountered.";
 }
 
 ASTResult StopNode::eval(RefEnv *env) {
-  throw StopException();
+  throw StopException();  
 }

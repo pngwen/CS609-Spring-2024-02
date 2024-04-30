@@ -13,6 +13,8 @@
 #include "if_node.h"
 #include "stop_node.h"
 #include "statements_node.h"
+#include "loop_node.h"
+#include "equal_node.h"
 #include <stdexcept>
 
 // advance the lexer
@@ -24,7 +26,9 @@ bool CalculatorParser::has(int t) { return _cur.tok == t; }
 
 // < Expression > ::= < Ref > < Expression' > 
 //                    | < If >
+//                    | < Stop >
 //                    | < Sum >                       
+//                    | < Loop >
 ASTNode *CalculatorParser::parse_expression() {
   if(has(CalculatorLexer::ID)) {
     ASTNode *left = parse_ref();
@@ -34,8 +38,10 @@ ASTNode *CalculatorParser::parse_expression() {
   } else if(has(CalculatorLexer::STOP)) {
     next();
     return new StopNode();
+  } else if(has(CalculatorLexer::LBRACE)) {
+    return parse_loop();
   }
-
+  
   return parse_sum();
 }
 
@@ -61,6 +67,7 @@ ASTNode *CalculatorParser::parse_sum() {
 
 // < Sum' > ::= ADD <Term> <Sum'>
 //                   | SUB <Term> <Sum'>
+//                   | EQUAL < Term > < Sum' >
 //                   | ""
 ASTNode *CalculatorParser::parse_sum2(ASTNode *left) {
   BinopNode *result = nullptr;
@@ -71,6 +78,9 @@ ASTNode *CalculatorParser::parse_sum2(ASTNode *left) {
   } else if (has(CalculatorLexer::SUB)) {
     next(); // consume SUB
     result = new SubtractNode();
+  } else if (has(CalculatorLexer::EQUAL)) {
+    next(); // consume EQUAL
+    result = new EqualNode();
   }
 
   if(result) {
@@ -171,50 +181,70 @@ ASTNode *CalculatorParser::parse(CalculatorLexer *lexer) {
   next(); 
   
   ASTNode *result = parse_statements();
-  if (_cur.tok != CalculatorLexer::EOI) {
+  if (_cur.tok != CalculatorLexer::EOI && _cur.tok != CalculatorLexer::EOL) {
     throw std::runtime_error("Unexpected tokens at the end of expression");
   }
+
   return result;
 }
 
 // if condition then statement
 ASTNode *CalculatorParser::parse_if() {
   if(has(CalculatorLexer::IF)) {
-    next();
+    next(); // consume IF
   } else {
     throw std::runtime_error("Expected IF");
   }
 
-  ASTNode *condition = parse_expression();
+  ASTNode *cond = parse_expression();
   
   if(has(CalculatorLexer::THEN)) {
-    next();
+    next(); // consume THEN 
   } else {
     throw std::runtime_error("Expected THEN");
   }
 
-  ASTNode *statement = parse_expression();
+  ASTNode *then = parse_expression();
 
-  IfNode *result = new IfNode();
-  result->left(condition);
-  result->right(statement);
+  IfNode *node = new IfNode();
+  node->left(cond);
+  node->right(then);
 
-  return result;
+  return node;
 }
 
-
-// Parse a list of statements
+// collection of statements
 ASTNode *CalculatorParser::parse_statements() {
-  StatementsNode *result = new StatementsNode();
   bool consume = false;
+  StatementsNode *node = new StatementsNode();
 
   do {
-    if(consume) {
-      next();
-    }
-    result->add_statement(parse_expression());
+    if(consume) { next(); }
+    node->add_statement(parse_expression());
     consume = true;
   } while(has(CalculatorLexer::SEMI));
 
-  return result;
+  return node;
+}
+
+// a loop consisting of { statements }
+ASTNode *CalculatorParser::parse_loop() {
+  if(has(CalculatorLexer::LBRACE)) {
+    next();
+  } else {
+    throw std::runtime_error("Expected {");
+  }
+  
+  StatementsNode *body = (StatementsNode*) parse_statements();
+  
+  if(has(CalculatorLexer::RBRACE)) {
+    next();
+  } else {
+    throw std::runtime_error("Expected }");
+  }
+
+  // build the loop node
+  LoopNode *node = new LoopNode();
+  node->body(body);
+  return node;
 }

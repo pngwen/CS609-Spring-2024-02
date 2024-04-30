@@ -7,17 +7,9 @@
 
 int main() {
   std::string input;
-  CalculatorLexer lex;
+  CalculatorLexer lex(std::cin);
   
   for(;;) {
-    // get the next line of input (if there is one)
-    std::cout << "> ";
-    getline(std::cin, input);
-    if(!std::cin) break;
-
-    // set up the lexer to scan the input
-    lex.input(input);
-
     // Print all the tokens in the input
     Lexer::Token tok;
     while((tok = lex.next()).tok != CalculatorLexer::EOI) {

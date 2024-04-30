@@ -2,9 +2,11 @@
 // Purpose: Empty virtual destructor for ASTNode.
 #include "ast_node.h"
 
-bool ASTResult::is_true() {
+// implement our language's truthiness
+bool ASTResult::is_true() const {
   int result;
 
+  // extract an integer for the result
   switch(type) {
     case INT:
       result = value.i;

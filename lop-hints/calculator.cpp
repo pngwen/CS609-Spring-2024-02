@@ -5,19 +5,16 @@
 #include "ref_env.h"
 
 int main() {
-  CalculatorLexer lexer;
+  CalculatorLexer lexer(std::cin);
   CalculatorParser parser;
   std::string input;
   RefEnv global;
 
   for(;;) {
-    // get a line of input
+    // get a complete statement
     std::cout << "> ";
-    std::getline(std::cin, input);
-    if(!std::cout) break;
 
     // set the input string to scan
-    lexer.input(input);
     ASTNode *tree = parser.parse(&lexer);
     ASTResult result = tree->eval(&global);
     delete tree;
