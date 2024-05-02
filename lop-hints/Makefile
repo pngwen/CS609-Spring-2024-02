@@ -16,7 +16,9 @@ CALCULATOR_OBJ= add_node.o\
 								stop_node.o\
 								statements_node.o\
 								loop_node.o\
-								equal_node.o
+								equal_node.o\
+								function_node.o\
+								function_call_node.o
 
 #compiler information
 LD=g++

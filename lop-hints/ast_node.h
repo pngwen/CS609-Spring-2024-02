@@ -7,12 +7,14 @@
 #define AST_NODE_H
 #include "ref_env.h"
 class RefEnv;
+class FunctionNode;
 
 struct ASTResult {
-  enum { VOID=0, INT, REAL} type;
+  enum { VOID=0, INT, REAL, FUNCTION} type;
   union {
     int i;
     double r;
+    FunctionNode *f;
   } value;
 
   bool is_true() const;

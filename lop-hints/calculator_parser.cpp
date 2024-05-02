@@ -15,6 +15,8 @@
 #include "statements_node.h"
 #include "loop_node.h"
 #include "equal_node.h"
+#include "function_node.h"
+#include "function_call_node.h"
 #include <stdexcept>
 
 // advance the lexer
@@ -31,6 +33,7 @@ bool CalculatorParser::has(int t) { return _cur.tok == t; }
 //                    | < Stop >
 //                    | < Sum >                       
 //                    | < Loop >
+//                    | < Function >
 ASTNode *CalculatorParser::parse_expression() {
   if(has(CalculatorLexer::ID)) {
     ASTNode *left = parse_ref();
@@ -42,6 +45,8 @@ ASTNode *CalculatorParser::parse_expression() {
     return new StopNode();
   } else if(has(CalculatorLexer::LBRACE)) {
     return parse_loop();
+  } else if(has(CalculatorLexer::FUNCTION)) {
+    return parse_function();
   }
   
   return parse_sum();
@@ -166,21 +171,31 @@ ASTNode *CalculatorParser::parse_exponent() {
 }
 
 //< Ref >        ::= ID
+//                   | ID ( args ) 
 ASTNode *CalculatorParser::parse_ref() {
   // detect an error
   if(!has(CalculatorLexer::ID)) {
     throw std::runtime_error("Expected ID");
   }
 
-  ASTNode *node = new RefNode(_cur.lexeme);
+  std::string id = _cur.lexeme;
   next();
-  return node;
+
+  if(has(CalculatorLexer::LPAREN)) {
+    return parse_function_call(id);
+  }
+
+  return new RefNode(id);
 }
 
 ASTNode *CalculatorParser::parse(CalculatorLexer *lexer) {
   // initialize the lexer
   _lexer = lexer;
   next(); 
+
+  if(has(CalculatorLexer::EOI)) {
+    return nullptr;
+  }
   
   ASTNode *result = parse_statements();
   if (_cur.tok != CalculatorLexer::EOI && _cur.tok != CalculatorLexer::EOL) {
@@ -222,6 +237,11 @@ ASTNode *CalculatorParser::parse_statements() {
 
   do {
     if(consume) { next(); }
+
+    // skip newlines
+    while(has(CalculatorLexer::EOL)) {
+      next();
+    }
     node->add_statement(parse_expression());
     consume = true;
   } while(has(CalculatorLexer::SEMI));
@@ -248,5 +268,90 @@ ASTNode *CalculatorParser::parse_loop() {
   // build the loop node
   LoopNode *node = new LoopNode();
   node->body(body);
+  return node;
+}
+
+
+// a function definition
+ASTNode *CalculatorParser::parse_function() {
+  if(has(CalculatorLexer::FUNCTION)) {
+    next(); // consume FUNCTION
+  } else {
+    throw std::runtime_error("Expected function");
+  }
+
+  std::string id;
+  if(has(CalculatorLexer::ID)) {
+    id = _cur.lexeme;
+    next(); // consume ID
+  } else {
+    throw std::runtime_error("Expected ID");
+  }
+
+  if(has(CalculatorLexer::LPAREN)) {
+    next(); // consume LPAREN
+  } else {
+    throw std::runtime_error("Expected (");
+  } 
+
+  // create the function
+  FunctionNode *node = new FunctionNode();
+  node->name(id);
+
+  if(has(CalculatorLexer::ID)) {
+    do {
+      if(has(CalculatorLexer::COMMA)) {
+        next(); // consume COMMA
+      }
+
+      if(has(CalculatorLexer::ID)) {
+        node->add_parameter(_cur.lexeme);
+        next();
+      } else {
+        throw std::runtime_error("Expected ID");
+      }
+    } while(has(CalculatorLexer::COMMA));
+  }
+  
+  if(has(CalculatorLexer::RPAREN)) {
+    next(); // consume RPAREN
+  } else {
+    throw std::runtime_error("Expected )");
+  } 
+
+  node->body(parse_loop());
+
+  return node;
+}
+
+// a function call
+ASTNode *CalculatorParser::parse_function_call(const std::string &id) {
+  if(has(CalculatorLexer::LPAREN)) {
+    next(); // consume LPAREN
+  } else {
+    throw std::runtime_error("Expected (");
+  }
+
+  // create the function call
+  FunctionCallNode *node = new FunctionCallNode;
+  node->name(id);
+
+  if(!has(CalculatorLexer::RPAREN)) {
+    do {
+      if(has(CalculatorLexer::COMMA)) {
+        next(); // consume COMMA
+      }
+      
+      node->add_argument(parse_expression());
+    } while(has(CalculatorLexer::COMMA));
+  }
+  
+  if(has(CalculatorLexer::RPAREN)) {
+    next(); // consume RPAREN
+  } else {
+    delete node;
+    throw std::runtime_error("Expected )");
+  }
+
   return node;
 }

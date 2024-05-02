@@ -68,6 +68,12 @@ private:
 
   // a loop consisting of { statements }
   ASTNode *parse_loop();
+
+  // a function definition
+  ASTNode *parse_function();
+
+  // a function call
+  ASTNode *parse_function_call(const std::string &id);
 };
 
 #endif

@@ -23,6 +23,8 @@ CalculatorLexer::CalculatorLexer(std::istream &_is) : _is(_is), _first(true) {
   _lex.add_token(LBRACE, make_regex("{"));
   _lex.add_token(RBRACE, make_regex("}"));
   _lex.add_token(EQUAL, make_regex("="));
+  _lex.add_token(FUNCTION, make_regex("function"));
+  _lex.add_token(COMMA, make_regex(","));
 
   _lex.add_token(ID, make_regex("[a-zA-Z_][a-zA-Z0-9_]*"));
 

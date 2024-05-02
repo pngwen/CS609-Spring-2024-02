@@ -16,6 +16,7 @@ int main() {
 
     // set the input string to scan
     ASTNode *tree = parser.parse(&lexer);
+    if(tree == nullptr) { break; }
     ASTResult result = tree->eval(&global);
     delete tree;
 

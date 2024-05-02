@@ -34,7 +34,9 @@ public:
     LBRACE,
     RBRACE,
     EQUAL,
-    EOL
+    EOL,
+    FUNCTION,
+    COMMA
   };
 
   // Get the next token from the input string
