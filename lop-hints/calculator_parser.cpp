@@ -18,7 +18,9 @@
 #include <stdexcept>
 
 // advance the lexer
-void CalculatorParser::next() { _cur = _lexer->next(); }
+void CalculatorParser::next() { 
+  _cur = _lexer->next(); 
+}
 
 // check to see if the current token matches the given token
 bool CalculatorParser::has(int t) { return _cur.tok == t; }

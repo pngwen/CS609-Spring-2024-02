@@ -44,6 +44,7 @@ private:
   Lexer _lex;
   std::istream &_is;
   bool _first;
+  Lexer::Token _tok;
 };
 
 #endif

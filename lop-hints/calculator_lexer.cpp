@@ -25,24 +25,31 @@ CalculatorLexer::CalculatorLexer(std::istream &_is) : _is(_is), _first(true) {
   _lex.add_token(EQUAL, make_regex("="));
 
   _lex.add_token(ID, make_regex("[a-zA-Z_][a-zA-Z0-9_]*"));
+
+  // prime the lexer to retrieve a line.
+  _tok.tok = EOL;
 }
 
 // Get the next token from the input string
 Lexer::Token CalculatorLexer::next() {
-  Lexer::Token tok;
   std::string line;
 
   do {
-    tok = _lex.next();
-    
-    // handle the end of the line
-    if(tok.tok == EOI) {
-      getline(_is, line);
-      if(not _is) { break; }
+    if(_tok.tok == EOL) {
+      std::getline(_is, line);
       _lex.input(line);
-      tok = _lex.next();
+      if(not _is) { 
+        _tok.tok = EOI; 
+        return _tok;
+      }
     }
-  } while (tok.tok == SKIP);
+    
+    _tok = _lex.next();
+  } while (_tok.tok == SKIP);
 
-  return tok;
+  if(_tok.tok == EOI) {
+    _tok.tok = EOL;
+  }
+
+  return _tok;
 }
